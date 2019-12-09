@@ -22,11 +22,13 @@
         <p>プログラムを書き、問題に対する<b>出力を保存したファイル</b>を作成します</p>
         <p><b>出力を保存したファイル</b>を下のボタンでアップロードした後、提出ボタンを押してください</b></p>
         <div class="wrap">
-            <form action="/submit" method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div>
-                    <input type="file">
+                    <input type="file" name="file" accept="text/plain">
+                    <button>提出</button>
                 </div>
             </form>
+
         </div>
         {%else%}
         <p>ファイルを提出するにはログインする必要があります</p>

@@ -74,16 +74,30 @@ def logout():
     return redirect(url_for('about'))
 
 
-@app.route('/submit')
+@app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    return render_template("submit.html")
-
-
-@app.route('/delete')
-def delete():
-    db.drop_all()
-    db.create_all()
-    return "ok"
+    if current_user.is_authenticated == False:
+        return render_template("submit.html")
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('ファイルが選択されていません', category='alert alert-danger')
+            return redirect(url_for("submit"))
+        answer = ""
+        try:
+            answer = request.files["file"].read().decode("UTF-8")
+        except:
+            flash('不正なファイルです。ファイルのエンコードはUTF-8である必要があります',
+                  category='alert alert-danger')
+            return redirect(url_for("submit"))
+        sub = Submission()
+        sub.username = current_user.username
+        sub.move = answer
+        db.session.add(sub)
+        db.session.commit()
+        flash("提出しました", category='alert alert-success')
+        return redirect(url_for("ranking"))
+    else:
+        return render_template("submit.html")
 
 
 if __name__ == '__main__':

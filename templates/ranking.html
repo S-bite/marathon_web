@@ -2,6 +2,15 @@
 
 {%block contents%}
 <div class="container panel panel-default ">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class=flashes>
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
     <h3>順位表</h3>
     <hr>
 
