@@ -24,15 +24,24 @@
             <li class="nav-item">
                 <a class="nav-link" href="submit">提出</a>
             </li>
+
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="logout">ログアウト</a>
+            </li>
+            {%else%}
             <li class="nav-item">
                 <a class="nav-link" href="login">ログイン</a>
             </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="register">ユーザー登録</a>
             </li>
 
         </ul>
+
     </div>
+
     {%block contents%}
     {%endblock%}
 </body>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, escape, redirect, abort, flash, url_for
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, login_user
 from database import Submission, User, db, app
 
 
@@ -15,10 +15,21 @@ def ranking():
     return render_template("ranking.html", submissions=allsubmissions)
 
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+
+@app.route('/task')
+def task():
+    return render_template("about.html")
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        print(current_user.username)
+        return render_template("login.html",)
     else:
         username = escape(request.form["username"])
         password = request.form["password"]
@@ -27,7 +38,9 @@ def login():
             flash("ユーザー名かパスワードが間違っています",
                   category='alert alert-danger')
             return redirect(url_for('login'))
-        return "welcome back!"
+        login_user(user)
+        flash("ログインしました！", category='alert alert-success')
+        return redirect(url_for('login'))
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -37,7 +50,12 @@ def register():
     else:
         username = escape(request.form["username"])
         password = request.form["password"]
+        if (len(username) >= 80):
+            flash("ユーザー名が長すぎます。80文字までにしてください",
+                  category='alert alert-danger')
+            return redirect(url_for('register'))
         user = User.query.filter_by(username=username).scalar()
+
         if user is not None:
             print(user)
             flash("そのユーザー名はすでに使われています",
@@ -68,8 +86,8 @@ if __name__ == '__main__':
     login_manager.init_app(app)
     login_manager.login_view = "users.login"  # login_viewのrouteを設定
     @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    def load_user(username):
+        return User.query.filter_by(username=username).first()
 
     db.create_all()
     app.run(debug=True)
