@@ -2,15 +2,26 @@
 
 {%block contents%}
 
-<div class="container panel panel-default ">
-    <div class="header">
-        <h3>これはなに？</h3>
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class=flashes>
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
     </div>
+    {% endif %}
+    {% endwith %}
+    <h3>このサイトについて</h3>
+    <hr>
+
     <div class="panel-body">
+
+        <b>これはなに？</b>
         <p>マラソンサイト</p>
-        <h3>使い方</h3>
+        <b>使い方</b>
         <p>*あとで書く*</p>
-        <h3>その他</h3>
+        <b>その他</b>
         <p>なんか書くかも</p>
         <p>何かありましたら<a href="https://twitter.com/nbit0125">えすびて</a>まで。</p>
     </div>

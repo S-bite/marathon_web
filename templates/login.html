@@ -2,9 +2,6 @@
 
 {%block contents%}
 <div class="container panel panel-default ">
-    <div class="header">
-        <h3>ログイン</h3>
-    </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class=flashes>
@@ -14,13 +11,17 @@
     </div>
     {% endif %}
     {% endwith %}
+    <h3>ログイン</h3>
+    <hr>
+
     <div class="panel-body">
         <div class="container">
-            <form action="/login" method="post">
-                <input type="text" placeholder="ユーザー名" name="username" required>
-                <input type="password" placeholder="パスワード" name="password" required>
-                <button>ログイン</button>
-
+            <form action="/login" class="form-horizontal" method="post" style="width: 330px; margin: auto;">
+                <input class="form-control" style="margin-bottom: 15px;" type="text" placeholder="ユーザー名" name="username"
+                    required>
+                <input class="form-control" style="margin-bottom: 15px;" type="password" placeholder="パスワード"
+                    name="password" required>
+                <button class="btn btn-primary btn-block">ログイン</button>
             </form>
         </div>
     </div>

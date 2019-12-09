@@ -2,46 +2,50 @@
 <html>
 
 <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 
 <body>
+    <nav class="navbar bg-dark p-1">
+        <div class="container">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="about">このサイトについて </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="task">問題</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="ranking">順位表</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="submit">提出</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="logout">ログアウト</a>
+                </li>
+                <li class="nav-item navbar-right">
+                    <a class="nav-link text-light">{{current_user.username}}</a>
+                </li>
 
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" href="about">これは何？</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="task">問題</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="ranking">順位表</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="submit">提出</a>
-            </li>
+                {%else%}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="login">ログイン</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="register">ユーザー登録</a>
+                </li>
 
-            {% if current_user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="logout">ログアウト</a>
-            </li>
-            {%else%}
-            <li class="nav-item">
-                <a class="nav-link" href="login">ログイン</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="register">ユーザー登録</a>
-            </li>
-
-        </ul>
-
-    </div>
-
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <p></p>
     {%block contents%}
     {%endblock%}
 </body>
