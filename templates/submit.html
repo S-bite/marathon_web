@@ -1,0 +1,27 @@
+<style type="text/css">
+    .wrap {
+        text-align: center;
+    }
+</style>
+{%extends "layout.html"%}
+
+{%block contents%}
+
+
+<div class="container panel panel-default">
+    <div class="panel-body">
+        <h2><b>提出方法</b></h2>
+        <p>プログラムを書き、問題に対する<b>出力を保存したファイル</b>を作成します</p>
+        <p><b>出力を保存したファイル</b>を下のボタンでアップロードした後、提出ボタンを押してください</b></p>
+        <div class="wrap">
+            <form action="/submit" method="post">
+                <div>
+                    <input type="file">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}
