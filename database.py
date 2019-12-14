@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)

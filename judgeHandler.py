@@ -13,6 +13,8 @@ def main():
             submission.status = result
             if (result == "AC"):
                 submission.score = int(score)
+            else:
+                submission.score = 0
             db.session.add(submission)
             db.session.commit()
         time.sleep(1)

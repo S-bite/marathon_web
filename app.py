@@ -1,17 +1,19 @@
 from flask import Flask, render_template, request, escape, redirect, abort, flash, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user
 from database import Submission, User, db, app
+from sqlalchemy import func
 
 
 @app.route('/')
 def index():
-    allsubmissions = Submission.query.all()
-    return render_template("ranking.html", submissions=allsubmissions)
+    return redirect(url_for('ranking'))
 
 
 @app.route('/ranking')
 def ranking():
-    allsubmissions = Submission.query.all()
+    print(dir(Submission.query))
+    allsubmissions = db.session.query(Submission.username, Submission.score, Submission.id, Submission.status, func.max(
+        Submission.score)).group_by(Submission.username).all()
     return render_template("ranking.html", submissions=allsubmissions)
 
 
