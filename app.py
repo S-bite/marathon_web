@@ -16,7 +16,7 @@ def submissions(id):
         return render_template("login.html")
     if (id == "me"):
         allsubmissions = db.session.query(Submission).filter(
-            Submission.username == current_user.username).order_by(Submission.id.asc()).all()
+            Submission.username == current_user.username).order_by(Submission.id.desc()).all()
         return render_template("mysubmissions.html", submissions=allsubmissions)
     else:
         try:
@@ -102,7 +102,12 @@ def submit():
     if current_user.is_authenticated == False:
         return render_template("submit.html")
     if request.method == 'POST':
-        if 'file' not in request.files:
+        """
+        ↓は本当に最悪です 本当は "file" in request.filesみたいな感じで判定をしたかったのですが、
+        たとえファイルが選択されていない状態であってもImmutableMultiDict([('file', <FileStorage: '' ('application/octet-stream')>)])
+        がrequest.filesとして送られてくるのを直せませんでした…（解決方法を知っている方がいれば教えてください…）
+        """
+        if request.files["file"].filename == "":
             flash('ファイルが選択されていません', category='alert alert-danger')
             return redirect("/submit")
         answer = ""
@@ -118,7 +123,7 @@ def submit():
         sub.submitdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         db.session.add(sub)
         db.session.commit()
-        flash("提出しました", category='alert alert-success')
+        flash("提出しました。少し時間をおいてリロードしてください", category='alert alert-success')
         return redirect("/submissions/me")
     else:
         return render_template("submit.html")

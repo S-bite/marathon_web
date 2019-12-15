@@ -1,7 +1,8 @@
 {%extends "layout.html"%}
 
 {%block contents%}
-<div class="container panel panel-default ">
+<div class="container panel panel-default  mt-5">
+
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class=flashes>
@@ -37,8 +38,7 @@
         </table>
         <div>
             <b>提出内容</b>
-            <textarea class="form-control rounded-0" id="exampleFormControlTextarea1"
-                rows="10">{{submission.move}}</textarea>
+            <textarea class="form-control rounded-0" rows="10" readonly>{{submission.move}}</textarea>
 
         </div>
     </div>

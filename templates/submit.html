@@ -1,9 +1,7 @@
 {%extends "layout.html"%}
 
 {%block contents%}
-
-
-<div class="container panel panel-default">
+<div class="container panel panel-default mt-5">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class=flashes>
@@ -21,15 +19,13 @@
         {% if current_user.is_authenticated %}
         <p>プログラムを書き、問題に対する<b>出力を保存したファイル</b>を作成します</p>
         <p><b>出力を保存したファイル</b>を下のボタンでアップロードした後、提出ボタンを押してください</b></p>
-        <div class="wrap">
-            <form method="post" enctype="multipart/form-data">
-                <div>
-                    <input type="file" name="file" accept="text/plain">
-                    <button>提出</button>
-                </div>
-            </form>
+        <form method="post" action="/submit" enctype="multipart/form-data">
+            <div>
+                <input type="file" name="file" accept="text/plain" />
+                <input type="submit" value="送信" class="btn-blue">
+            </div>
+        </form>
 
-        </div>
         {%else%}
         <p>ファイルを提出するにはログインする必要があります</p>
         <p>右上のメニューからログインorユーザー登録を行ってください</p>

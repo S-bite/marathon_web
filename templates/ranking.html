@@ -18,19 +18,19 @@
         <table class="table  table-bordered table-striped">
             <thead>
                 <tr>
-                    <th style="width: 20px">順位</th>
-                    <th style="width: 400px">ユーザー</th>
-                    <th style="width: 200px">スコア</th>
-                    <th style="width: 200px">提出日時</th>
+                    <th style="width: 50px" class="text-center">順位</th>
+                    <th style="width: 400px" class="text-center">ユーザー</th>
+                    <th style="width: 200px" class="text-center">スコア</th>
+                    <th style="width: 200px" class="text-center">提出日時</th>
                 </tr>
             </thead>
             <tbody class=" list">
                 {% for info in submissions %}
                 <tr>
-                    <td align="center"> {{loop.index}} </td>
+                    <td class="text-center"> {{loop.index}} </td>
                     <td> {{info.username|safe}} </td>
-                    <td align="center">{{info.score}}</td>
-                    <td align="center"> {{info.submitdate}} </td>
+                    <td class="text-center">{{info.score}}</td>
+                    <td class=" text-center"> {{info.submitdate}} </td>
 
                 </tr>
                 {% endfor %}
