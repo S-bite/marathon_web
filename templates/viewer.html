@@ -2,7 +2,6 @@
 
 
 {%block contents%}
-<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
 <script src="/static/viewer.js"></script>
 
 <div class="container  mt-5">
@@ -17,9 +16,12 @@
     {% endwith %}
     <h3>ビューア</h3>
     <hr>
-    <div class="panel-body">
-        <div id="viewer-canvas" class="jumbotron">
-        </div>
+    <div style="display:inline-flex">
+        出力ファイル：<input type="file" id="output" onchange="handleOutputFiles(this.files)">　　
+        <div id="outputFile"></div>
+
     </div>
-</div>
-{%endblock%}
+    <div class="render-area">
+        <canvas id="canvas" width="590" height="590"></canvas>
+    </div>
+    {%endblock%}
