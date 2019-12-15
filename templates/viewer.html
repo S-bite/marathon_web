@@ -1,0 +1,25 @@
+{%extends "layout.html"%}
+
+
+{%block contents%}
+<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+<script src="/static/viewer.js"></script>
+
+<div class="container  mt-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class=flashes>
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <h3>ビューア</h3>
+    <hr>
+    <div class="panel-body">
+        <div id="viewer-canvas" class="jumbotron">
+        </div>
+    </div>
+</div>
+{%endblock%}

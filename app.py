@@ -48,6 +48,11 @@ def task():
     return render_template("task.html")
 
 
+@app.route('/viewer')
+def viewer():
+    return render_template("viewer.html")
+
+
 @app.route('/register', methods=["GET", "POST"])
 def register():
     if request.method == "GET":
