@@ -29,3 +29,7 @@ def genMove():
         else:
             move += "{} {} {} {}\n".format(y1, x1, y2, x2)
     return move
+
+
+if __name__ == "__main__":
+    print(genMove())

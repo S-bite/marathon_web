@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, escape, redirect, abort, flas
 from flask_login import LoginManager, current_user, login_user, logout_user
 from database import Submission, User, db, app
 from sqlalchemy import func
+import datetime
 
 
 @app.route('/')
@@ -9,12 +10,32 @@ def index():
     return redirect(url_for('ranking'))
 
 
+@app.route('/submissions/<id>')
+def submissions(id):
+    if current_user.is_authenticated == False:
+        return render_template("login.html")
+    if (id == "me"):
+        allsubmissions = db.session.query(Submission).filter(
+            Submission.username == current_user.username).order_by(Submission.id.asc()).all()
+        return render_template("mysubmissions.html", submissions=allsubmissions)
+    else:
+        try:
+            id = int(id)
+        except:
+            flash("URLが無効です", category='alert alert-danger')
+            return render_template("mysubmissions.html", submissions=[])
+        submission = db.session.query(Submission).get(id)
+        if submission.username != current_user.username:
+            flash("現在、他のユーザの提出を見ることはできません", category='alert alert-danger')
+            return redirect("/submissions/me")
+        return render_template("submission.html", submission=submission)
+
+
 @app.route('/ranking')
 def ranking():
-    print(dir(Submission.query))
-    allsubmissions = db.session.query(Submission.username, Submission.score, Submission.id, Submission.status, func.max(
-        Submission.score)).group_by(Submission.username).all()
-    return render_template("ranking.html", submissions=allsubmissions)
+    submissions = db.session.query(Submission, func.max(Submission.score)).group_by(
+        Submission.username).order_by(Submission.score.desc(), Submission.id.asc()).all()
+    return render_template("ranking.html", submissions=[row for row, _ in submissions])
 
 
 @app.route('/about')
@@ -37,7 +58,7 @@ def register():
         if (len(username) >= 80):
             flash("ユーザー名が長すぎます。80文字までにしてください",
                   category='alert alert-danger')
-            return redirect(url_for('register'))
+            return redirect('/register')
         user = User.query.filter_by(username=username).scalar()
 
         if user is not None:
@@ -50,7 +71,7 @@ def register():
         db.session.commit()
         login_user(user)
         flash("登録しました！", category='alert alert-success')
-        return redirect(url_for('about'))
+        return redirect("/about")
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -67,7 +88,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user)
         flash("ログインしました！", category='alert alert-success')
-        return redirect(url_for('about'))
+        return redirect("/about")
 
 
 @app.route('/logout')
@@ -83,21 +104,22 @@ def submit():
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('ファイルが選択されていません', category='alert alert-danger')
-            return redirect(url_for("submit"))
+            return redirect("/submit")
         answer = ""
         try:
             answer = request.files["file"].read().decode("UTF-8")
         except:
             flash('不正なファイルです。ファイルのエンコードはUTF-8である必要があります',
                   category='alert alert-danger')
-            return redirect(url_for("submit"))
+            return redirect("/submit")
         sub = Submission()
         sub.username = current_user.username
         sub.move = answer
+        sub.submitdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         db.session.add(sub)
         db.session.commit()
         flash("提出しました", category='alert alert-success')
-        return redirect(url_for("ranking"))
+        return redirect("/submissions/me")
     else:
         return render_template("submit.html")
 

@@ -1,0 +1,46 @@
+{%extends "layout.html"%}
+
+{%block contents%}
+<div class="container panel panel-default ">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class=flashes>
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <h3>提出詳細</h3>
+    <hr>
+
+    <div class="panel-body">
+        <table class="table table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ユーザー</th>
+                    <th>状態</th>
+                    <th>スコア</th>
+                    <th>提出日時</th>
+
+                </tr>
+            </thead>
+            <tbody class="list">
+                <tr>
+                    <td> {{submission.username|safe}} </td>
+                    <td>{{submission.status}}</td>
+                    <td>{{submission.score}}</td>
+                    <td>{{submission.submitdate}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <b>提出内容</b>
+            <textarea class="form-control rounded-0" id="exampleFormControlTextarea1"
+                rows="10">{{submission.move}}</textarea>
+
+        </div>
+    </div>
+</div>
+{%endblock%}

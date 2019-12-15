@@ -44,6 +44,7 @@ class Submission(db.Model):
     move = db.Column(db.String(80000), unique=False, nullable=False)
     status = db.Column(db.String(80), unique=False, nullable=False)
     score = db.Column(db.Integer(), unique=False, nullable=True)
+    submitdate = db.Column(db.String(80))
 
     def __init__(self):
         self.status = "WJ"

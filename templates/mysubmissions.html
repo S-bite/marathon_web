@@ -11,27 +11,28 @@
     </div>
     {% endif %}
     {% endwith %}
-    <h3>順位表</h3>
+    <h3>自分の提出</h3>
     <hr>
 
     <div class="panel-body">
-        <table class="table  table-bordered table-striped">
+        <table class="table table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th style="width: 20px">順位</th>
-                    <th style="width: 400px">ユーザー</th>
-                    <th style="width: 200px">スコア</th>
-                    <th style="width: 200px">提出日時</th>
+                    <th>ユーザー</th>
+                    <th>状態</th>
+                    <th>スコア</th>
+                    <th>提出日時</th>
+                    <th>詳細</th>
                 </tr>
             </thead>
-            <tbody class=" list">
+            <tbody class="list">
                 {% for info in submissions %}
                 <tr>
-                    <td align="center"> {{loop.index}} </td>
                     <td> {{info.username|safe}} </td>
-                    <td align="center">{{info.score}}</td>
-                    <td align="center"> {{info.submitdate}} </td>
-
+                    <td>{{info.status}}</td>
+                    <td>{{info.score}}</td>
+                    <td>{{info.submitdate}}</td>
+                    <td><a href="/submissions/{{info.id}}">詳細</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -12,33 +12,38 @@
         <div class="container">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="about">このサイトについて </a>
+                    <a class="nav-link text-light" href="/about">このサイトについて </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="task">問題</a>
+                    <a class="nav-link text-light" href="/task">問題</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="ranking">順位表</a>
+                    <a class="nav-link text-light" href="/ranking">順位表</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="submit">提出</a>
+                    <a class="nav-link text-light" href="/submit">提出</a>
                 </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/submissions/me">自分の提出</a>
+                </li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="logout">ログアウト</a>
+                    <a class="nav-link text-light" href="/logout">ログアウト</a>
                 </li>
                 <li class="nav-item navbar-right">
-                    <a class="nav-link text-light">{{current_user.username}}</a>
+                    <a class="nav-link text-light">{{current_user.username|safe}}</a>
                 </li>
 
                 {%else%}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="login">ログイン</a>
+                    <a class="nav-link text-light" href="/login">ログイン</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="register">ユーザー登録</a>
+                    <a class="nav-link text-light" href="/register">ユーザー登録</a>
                 </li>
 
                 {% endif %}
