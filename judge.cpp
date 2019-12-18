@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int H = 512;
-const int W = 512;
+const int H = 128;
+const int W = 128;
 
 //Rect自体は左端が(0,0)で、
 //(y1,x1)が操作矩形の左上座標、(y2,x2)が操作矩形の右下座標

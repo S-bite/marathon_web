@@ -17,11 +17,11 @@
     <h3>ビューア</h3>
     <hr>
     <div style="display:inline-flex">
-        出力ファイル：<input type="file" id="output" onchange="handleOutputFiles(this.files)">　　
+        出力ファイル：<input type="file" id="output" onchange="init(this.files)">　　
         <div id="outputFile"></div>
 
     </div>
     <div class="render-area">
-        <canvas id="canvas" width="590" height="590"></canvas>
+        <canvas id="canvas" width="512" height="512"></canvas>
     </div>
     {%endblock%}
