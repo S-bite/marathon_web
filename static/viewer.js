@@ -5,6 +5,8 @@ const W = 128
 var movenum = 0;
 var moves = [];
 var boards = []
+var isRunning = false;
+var isLoaded = false;
 
 var ctx
 function renderCanvas(turn) {
@@ -31,6 +33,7 @@ function renderCanvas(turn) {
 
 
 function buildBoardFromMoves() {
+    boards = []
     var curBoard = new Array(H)
     for (var i = 0; i < H; i++) {
         curBoard[i] = new Array(W)
@@ -50,9 +53,12 @@ function buildBoardFromMoves() {
         boards.push(JSON.parse(JSON.stringify(curBoard)))
     }
 }
+var turn = 0;
+var frame = 0;
 
 
 function init(file, callback) {
+    isLoaded = false;
     ctx = document.getElementById("canvas").getContext("2d")
     console.log(ctx)
     var reader = new FileReader();
@@ -60,7 +66,7 @@ function init(file, callback) {
     reader.onload = function () {
         var rawOutputList = reader.result.split(/[\s\n]/);
         movenum = Number(rawOutputList[0])
-        if (movenum > 1000) {
+        if (movenum > 500) {
             alert("操作回数が多すぎます")
             return;
         }
@@ -73,22 +79,116 @@ function init(file, callback) {
             }
             moves.push(JSON.parse(JSON.stringify(tmp)))
         }
-        buildBoardFromMoves()
+        turn = 0;
+        frame = 0;
 
-        var turn = 0;
-        var frame = 0;
-        (function animloop() {
-            frame++;
-            if (frame % 50 == 49) {
-                frame = 0;
-                renderCanvas(turn);
-                turn++;
-                if (turn == movenum) {
-                    turn = 0
-                }
-            }
-            window.requestAnimationFrame(animloop);
-        }());
+        buildBoardFromMoves()
+        renderCanvas(turn)
+        isLoaded = true;
+
     }
 }
+(function () {
+    var slider = document.getElementById('slider1');
+    var output = document.getElementById('turn');
 
+    var input = slider.getElementsByTagName('input')[0];
+    var root = document.documentElement;
+    var dragging = false;
+    var value = output.value;// 初期位置
+    var width = input.clientWidth / 2;
+
+    var start = document.getElementById('start');
+    console.log(document);
+    var update = function () {
+        id = window.requestAnimationFrame(update);
+        if (isRunning == false) {
+            window.cancelAnimationFrame(id);
+            return;
+        }
+        if (frame % 5 == 0) {
+            frame = 0;
+            turn++;
+            renderCanvas(turn);
+            value = turn
+            set_value();
+
+            if (turn == movenum) {
+                turn = 0;
+                isRunning = false
+                start.innerText = '▶';
+                cancelAnimationFrame(update);
+            }
+        }
+        frame++;
+
+    };
+
+    start.onclick = function (evt) {
+        if (isRunning) {
+            isRunning = false;
+            start.innerText = '▶';
+            cancelAnimationFrame(update);
+        } else if (isLoaded) {
+            isRunning = true;
+            start.innerText = '■';
+            update();
+        } else if (!isLoaded) {
+            alert("ファイルが選択されていません")
+        }
+    };
+
+
+    var set_value = function () {
+        // つまみのサイズ(input.clientWidth)だけ位置を調整
+        input.style.left = (value / movenum * 500 - input.clientWidth / 2) + 'px';
+        output.value = value;
+    };
+    set_value();
+
+    // 目盛り部分をクリックしたとき
+    slider.onclick = function (evt) {
+        dragging = true;
+        document.onmousemove(evt);
+        document.onmouseup();
+    };
+    // ドラッグ開始
+    input.onmousedown = function (evt) {
+        if (isLoaded) {
+            dragging = true;
+            return false;
+
+        }
+    };
+    // ドラッグ終了
+    document.onmouseup = function (evt) {
+        if (dragging) {
+            dragging = false;
+            output.value = value;
+        }
+    };
+    document.onmousemove = function (evt) {
+        if (dragging) {
+            // ドラッグ途中
+            if (!evt) {
+                evt = window.event;
+            }
+            var left = evt.clientX;
+            var rect = slider.getBoundingClientRect();
+            // マウス座標とスライダーの位置関係で値を決める
+            value = Math.ceil((left - rect.left + width) / 500 * movenum);
+            // スライダーからはみ出したとき
+            if (value < 0) {
+                value = 0;
+            } else if (value > movenum) {
+                value = movenum;
+            }
+            turn = value
+            set_value();
+
+            renderCanvas(turn)
+            return false;
+        }
+    };
+
+}());
