@@ -14,13 +14,16 @@ function renderCanvas(turn) {
     ctx.clearRect(0, 0, 512, 512)
     for (var i = 0; i < H; i++) {
         for (var j = 0; j < W; j++) {
-            if (boards[turn][i][j] == 0) {
-                ctx.fillStyle = "#000000"
-            } else {
-                ctx.fillStyle = "#ffffff"
+            var color = "#"
+            for (var k = 0; k < 3; k++) {
+                if (boards[turn][i][j][k] == 0) {
+                    color += "00"
+                } else {
+                    color += "ff"
+                }
             }
+            ctx.fillStyle = color
             ctx.fillRect(j * 4, i * 4, 4, 4)
-
         }
     }
     ctx.strokeStyle = "#FF8888"
@@ -31,6 +34,20 @@ function renderCanvas(turn) {
     }
 }
 
+function calcScore(board) {
+    var score = 0;
+    for (var i = 0; i < H; i++) {
+        for (var j = 0; j < W; j++) {
+            if ((i + j) % 2 == 0) {
+                score += board[i][j][0];
+            }
+            else {
+                score += 1 - board[i][j][1];
+            }
+        }
+    }
+    return score
+}
 
 function buildBoardFromMoves() {
     boards = []
@@ -38,7 +55,7 @@ function buildBoardFromMoves() {
     for (var i = 0; i < H; i++) {
         curBoard[i] = new Array(W)
         for (var j = 0; j < W; j++) {
-            curBoard[i][j] = 0
+            curBoard[i][j] = [0, 0, 0]
         }
     }
     boards.push(JSON.parse(JSON.stringify(curBoard)))
@@ -47,11 +64,23 @@ function buildBoardFromMoves() {
         curBoard = JSON.parse(JSON.stringify(boards[turn]))
         for (var i = moves[turn][0]; i <= moves[turn][2]; i++) {
             for (var j = moves[turn][1]; j <= moves[turn][3]; j++) {
-                curBoard[i][j] = 1 - curBoard[i][j];
+                if (moves[turn][4] == 0) {
+                    curBoard[i][j][0] = 1 - curBoard[i][j][0];
+                } else if (moves[turn][4] == 1) {
+                    curBoard[i][j][1] = 1 - curBoard[i][j][1];
+                } else if (moves[turn][4] == 2) {
+                    curBoard[i][j][2] = 1 - curBoard[i][j][2];
+                } else if (moves[turn][4] == 3) {
+                    curBoard[i][j][0] = 1 - curBoard[i][j][0];
+                    curBoard[i][j][1] = 1 - curBoard[i][j][1];
+                    curBoard[i][j][2] = 1 - curBoard[i][j][2];
+                }
             }
         }
         boards.push(JSON.parse(JSON.stringify(curBoard)))
     }
+    document.getElementById('score').innerText = calcScore(boards[movenum]);
+
 }
 var turn = 0;
 var frame = 0;
@@ -59,6 +88,7 @@ var frame = 0;
 
 function init(file, callback) {
     isLoaded = false;
+    document.getElementById('score').innerText = "wait...";
     ctx = document.getElementById("canvas").getContext("2d")
     console.log(ctx)
     var reader = new FileReader();
@@ -71,11 +101,10 @@ function init(file, callback) {
             return;
         }
         moves = []
-        for (var i = 1; i <= movenum * 4; i += 4) {
+        for (var i = 1; i <= movenum * 5; i += 5) {
             var tmp = []
-            for (var j = 0; j < 4; j++) {
+            for (var j = 0; j < 5; j++) {
                 tmp.push(Number(rawOutputList[i + j]))
-
             }
             moves.push(JSON.parse(JSON.stringify(tmp)))
         }

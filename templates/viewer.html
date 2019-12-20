@@ -25,6 +25,28 @@
         height: 20px;
         display: block;
     }
+
+    #score-area {
+        width: 80px;
+        height: 70px;
+        margin: 0px 5px 60px 5px;
+        box-shadow: 0 0 2px 2px #666666;
+    }
+
+    #score-label {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: 2px solid #666666;
+        margin: 0px;
+        padding: 4px;
+    }
+
+    #score {
+        text-align: right;
+        margin: 0px;
+        padding: 4px 4px;
+    }
 </style>
 <div class="container  mt-5">
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -43,7 +65,12 @@
         <div id="outputFile"></div>
 
     </div>
+    <div id="score-area">
+        <p id="score-label">Score</p>
+        <p id="score">0</p>
+    </div>
     <form class="js-slider-form" onsubmit="return false;">
+
         <button id="start">▶</button>
         <div id="slider1" class="js-slider">
             <div></div>

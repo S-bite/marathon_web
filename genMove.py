@@ -19,14 +19,15 @@ def genMove():
         y1 = randint(0, H-1)
         x1 = randint(0, W-1)
         y2 = randint(0, H-1)
-        x2 = randint(0, W-1)
+        x2 = randint(0, W - 1)
+        moveType = randint(0, 3)
         while (not isValidMove(y1, x1, y2, x2)):
             y1 = randint(0, H-1)
             x1 = randint(0, W-1)
             y2 = randint(0, H-1)
             x2 = randint(0, W-1)
         else:
-            move += "{} {} {} {}\n".format(y1, x1, y2, x2)
+            move += "{} {} {} {} {}\n".format(y1, x1, y2, x2, moveType)
     return move
 
 
